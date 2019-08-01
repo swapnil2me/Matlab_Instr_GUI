@@ -10,7 +10,7 @@ classdef SMA100A
     end
     
     methods
-        function obj=SMA100A(address,sF,eF,dF,rampSteps)
+        function obj=SMA100A(address,sF,eF,dF,rampSteps,rampPS)
             inst = instrfind('Type', 'visa-tcpip', 'RsrcName', ['TCPIP0::',address,'::inst0::INSTR'], 'Tag', '');
             if isempty(inst)
                 inst = visa('NI', ['TCPIP0::',address,'::inst0::INSTR']);
@@ -24,9 +24,11 @@ classdef SMA100A
             obj.eF=eF;
             obj.dF=dF;
             obj.rampSteps=rampSteps;
+            obj.address = address;
+            obj.rampPS = rampPS;
         end
         %% V Ramp
-        function setVc = rampV(obj,setV)
+        function rampV(obj,setV)
             SMA = obj.instR;
             ps = obj.rampPS;
             RmpN = obj.rampSteps;
@@ -56,6 +58,11 @@ classdef SMA100A
                 phs = 0;
             end
             fprintf(obj.instR, ['FREQ ',num2str(frq,'%.8f'),' MHz; PHAS ',num2str(phs),';']);
+        end
+        
+        %% Close
+        function close(obj)
+            fclose(obj.instR);
         end
         
     end

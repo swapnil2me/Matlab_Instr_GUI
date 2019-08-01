@@ -9,7 +9,7 @@ classdef SRS830
         function obj = SRS830(address,refreQ)
             inst = instrfind('Type', 'gpib', 'BoardIndex', 0, 'PrimaryAddress', address, 'Tag', '');
             if isempty(inst)
-                inst = gpib('NI', 0, adrs);
+                inst = gpib('NI', 0, address);
             else
                 fclose(inst);
                 inst = inst(1);
@@ -17,10 +17,11 @@ classdef SRS830
             fopen(inst);
             obj.instR = inst;
             obj.refreQ= refreQ;
+            obj.address = address;
         end
         
         %% Ramp Aux
-        function obj = rampVaux(obj,chn,OSV,RmpN,ps)
+        function rampVaux(obj,chn,OSV,RmpN,ps)
             Lia = obj.instR;
             OCV = str2double(query(Lia,['AUXV?',num2str(chn)]))*1000;
             RmpSt =((OCV-OSV)/RmpN);
@@ -63,6 +64,7 @@ classdef SRS830
                 disp('LIA Unlocked')
                 pause(tCon/1000)
                 unlok = query(LIA, 'lias?3');
+                
             end
             data2 = query(LIA, 'SNAP?3,4');
             ind = strfind(data2,',');
@@ -70,18 +72,23 @@ classdef SRS830
             P = str2double(data2(ind+1:end));
         end
         %% Sweep and read
-        function data=sweepandread(obj,GTsg,SDsg)
-            LIA = obj.instR;
+        function data=sweepandread(obj,GTsg,SDsg,directn)
             mx=obj.refreQ*1e-6;
             sF = GTsg.sF;
-            eF = GTsg.sF;
-            dF = SDsg.sF;
+            eF = GTsg.eF;
+            dF = SDsg.dF;
+            
             N = round(abs(eF-sF)/dF);
+            
+            if directn < 0
+                [eF,sF] = deal(sF,eF);
+            end
+            
             if sF>eF
                 dF = -dF;
             end
             F=sF-dF;
-            figure(1);hold on;
+            
             data(N) = struct();
             for i=0:N
                 F =F+dF;
@@ -89,17 +96,23 @@ classdef SRS830
                 GTsg.setFreq(F,0)
                 SDsg.setFreq(mF)
                 if i == 0
-                    [A,P]=readAPsens(LIA,3000);
+                    [A,P]=obj.readAPsens(3000);
                 end
-                [A,P]=readAPsens(LIA,500);
+                [A,P]=obj.readAPsens(500);
                 data(i+1).Freq=F;
                 data(i+1).Amp=A;
                 data(i+1).Phs=P;
+                figure(2);hold on;
                 yyaxis left
                 plot(F,A*1e9,'ob','MarkerSize',1.5);
                 yyaxis right
-                plot(F,P,'sr','MarkerSize',2);
+                plot(F,P,'sr','MarkerSize',2);hold off;
             end
+            
+        end
+        %% Close
+        function close(obj)
+            fclose(obj.instR);
         end
     end
 end
