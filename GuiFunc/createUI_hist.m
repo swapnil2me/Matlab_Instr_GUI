@@ -23,10 +23,10 @@ uicontrol('Style', 'TEXT','Units','normalized','Position',[0.00,0.6,0.1,0.1],'st
 uicontrol('Style', 'TEXT','Units','normalized','Position',[0.00,0.5,0.1,0.1],'string','VsAC');
 uicontrol('Style', 'TEXT','Units','normalized','Position',[0.00,0.4,0.1,0.1],'string','LIA');
 
-S.VgDCInst  = uicontrol('Style', 'popupmenu','Units','normalized','Position',[0.1,0.7,0.1,0.1],'string',VgDC_Inst);
-S.VgACInst  = uicontrol('Style', 'popupmenu','Units','normalized','Position',[0.1,0.6,0.1,0.1],'string',VgAC_Inst);
-S.VsACInst  = uicontrol('Style', 'popupmenu','Units','normalized','Position',[0.1,0.5,0.1,0.1],'string',VsAC_Inst);
-S.LIAInst      = uicontrol('Style', 'popupmenu','Units','normalized','Position',[0.1,0.4,0.1,0.1],'string',LockIN);
+S.VgDCInst  = uicontrol('Style', 'popupmenu','Units','normalized','Position',[0.1,0.7,0.1,0.1],'string',VgDC_Inst,'Value',pastConf.InstR_selection(1));
+S.VgACInst  = uicontrol('Style', 'popupmenu','Units','normalized','Position',[0.1,0.6,0.1,0.1],'string',VgAC_Inst,'Value',pastConf.InstR_selection(2));
+S.VsACInst  = uicontrol('Style', 'popupmenu','Units','normalized','Position',[0.1,0.5,0.1,0.1],'string',VsAC_Inst,'Value',pastConf.InstR_selection(3));
+S.LIAInst      = uicontrol('Style', 'popupmenu','Units','normalized','Position',[0.1,0.4,0.1,0.1],'string',LockIN,'Value',pastConf.InstR_selection(4));
 
 S.VgDCStart  = uicontrol('Style', 'edit','Units','normalized','Position',[0.25,0.7,0.1,0.095],'String',pastConf.Arv(1,1));
 S.VgACStart  = uicontrol('Style', 'edit','Units','normalized','Position',[0.25,0.6,0.1,0.095],'String',pastConf.Arv(2,1));
