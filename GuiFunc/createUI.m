@@ -1,9 +1,9 @@
 function S = createUI()
 S.f = figure;
-VgDC_Inst={'KT26','LIA'};
-VgAC_Inst={'SMA','ANA','KT33','AT81150'};
-VsAC_Inst={'SMA','ANA','KT33','AT81150'};
-LockIN = {'SRS830','SRS844'};
+VgDC_Inst={'LIA'};
+VgAC_Inst={'SMA'};
+VsAC_Inst={'SMA'};
+LockIN = {'SRS830'};
 
 uicontrol('Style', 'TEXT','Units','normalized','Position',[0.1,0.8,0.1,0.1],'string','INSTR');
 uicontrol('Style', 'TEXT','Units','normalized','Position',[0.25,0.8,0.1,0.1],'string','Start (mV for AC, V for DC)');
