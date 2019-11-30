@@ -1,4 +1,4 @@
-function myGUI
+function mixDownFreqSweep
 close all;clc
 global S
 myPath = pwd;
